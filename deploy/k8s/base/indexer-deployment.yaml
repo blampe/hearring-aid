@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (HEAD)
+  labels:
+    io.kompose.service: indexer
+  name: indexer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: indexer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (HEAD)
+      labels:
+        io.kompose.service: indexer
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: default-postgres-env
+          image: indexer
+          name: indexer
+          volumeMounts:
+            - mountPath: /code/config.ini
+              name: indexer-cm0
+              subPath: config.ini
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: indexer.ini
+                path: config.ini
+            name: indexer-cm0
+          name: indexer-cm0

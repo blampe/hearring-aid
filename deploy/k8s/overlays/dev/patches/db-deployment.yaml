@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: clear-lost-found
+          image: "metabrainz/musicbrainz-docker-db:16-build0"
+          command:
+            - /bin/bash
+            - -c
+            - rm -rf "/var/lib/postgresql/data/lost+found" && ls -al /var/lib/postgresql/data
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pgdata
+      containers:
+        - name: db
+          image: "metabrainz/musicbrainz-docker-db:16-build0"
+          args:
+            - postgres
+            - -c
+            - shared_buffers=4096MB
+            - -c
+            - shared_preload_libraries=pg_amqp.so
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+            - name: shm
+              mountPath: /dev/shm
+
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 256Mi
+
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["amd64"]

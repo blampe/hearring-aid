@@ -1,0 +1,8 @@
+# lidarr-metadata hard-codes these creds.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: default-postgres-env
+data:
+  POSTGRES_PASSWORD: abc
+  POSTGRES_USER: abc

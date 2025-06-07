@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (HEAD)
+  labels:
+    io.kompose.service: search
+  name: search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: search
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (HEAD)
+      labels:
+        io.kompose.service: search
+    spec:
+      containers:
+        - env:
+            - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+              value: "true"
+            - name: SOLR_HEAP
+              value: 2g
+          image: musicbrainz-docker_search:4.1.0
+          name: search
+          ports:
+            - containerPort: 8983
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /media/dbdump
+              name: dbdump
+              readOnly: true
+            - mountPath: /var/solr
+              name: solrdata
+            - mountPath: /var/cache/musicbrainz/solr-backups
+              name: solrdump
+      restartPolicy: Always
+      volumes:
+        - name: dbdump
+          persistentVolumeClaim:
+            claimName: dbdump
+            readOnly: true
+        - name: solrdata
+          persistentVolumeClaim:
+            claimName: solrdata
+        - name: solrdump
+          persistentVolumeClaim:
+            claimName: solrdump

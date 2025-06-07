@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search
+spec:
+  template:
+    spec:
+      containers:
+        - name: search
+          image: blampe/mb-solr:4.1.0 # For ARM support.
+      securityContext:
+        runAsUser: 8983
+        runAsGroup: 8983
+        fsGroup: 8983

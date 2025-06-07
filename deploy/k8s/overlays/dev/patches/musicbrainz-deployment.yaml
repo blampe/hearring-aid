@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musicbrainz
+spec:
+  template:
+    spec:
+      containers:
+        - name: musicbrainz
+          #image: metabrainz/musicbrainz-docker-musicbrainz:v-2025-05-23.0-schema-change-build1
+          image: blampe/musicbrainz:v-2025-05-23.0-schema-change-build1 # Multi-platform.
+          command: ["docker-entrypoint.sh"] # The server isn't needed.
+          args: ["sleep", "infinity"]
+          volumeMounts:
+            - mountPath: /media/dbdump/tmp
+              name: tmp
+          env:
+            - name: MUSICBRAINZ_BASE_DOWNLOAD_URL
+              value: https://data.metabrainz.org/pub/musicbrainz
+
+      initContainers:
+        - name: specify-non-commercial-use
+          #image: metabrainz/musicbrainz-docker-musicbrainz:v-2025-05-23.0-schema-change-build1
+          image: blampe/musicbrainz:v-2025-05-23.0-schema-change-build1 # Multi-platform.
+          command:
+            - touch
+          args:
+            - /media/dbdump/.for-non-commercial-use
+          volumeMounts:
+            - mountPath: /media/dbdump
+              name: dbdump
+
+      volumes:
+        - name: tmp
+          emptyDir: {}

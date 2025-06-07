@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr-metadata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: md
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: md
+    spec:
+      containers:
+        - name: md
+          image: blampe/lidarr.metadata:70a9707
+          ports:
+            - containerPort: 5001
+              protocol: TCP
+          env:
+            - name: DEBUG
+              value: "true"
+            - name: PRODUCTION
+              value: "true"
+            - name: USE_CACHE
+              value: "true"
+            - name: ENABLE_STATS
+              value: "false"
+            - name: ROOT_PATH
+              value: /api/v0.4/
+
+            - name: CLOUDFLARE_AUTH_EMAIL
+              value: FIXME
+            - name: CLOUDFLARE_AUTH_KEY
+              value: FIXME
+            - name: CLOUDFLARE_URL_BASE
+              value: https://FIXME
+            - name: CLOUDFLARE_ZONE_ID
+              value: FIXME
+            - name: INVALIDATE_APIKEY
+              value: "" # Anyone can invalidate.
+
+              #- name: EXTERNAL_LIMIT_CLASS
+              #value: SimpleRateLimiter # Crashes.
+              #value: RedisRateLimiter # Crashes.
+
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: "6379"
+
+            - name: FANART_KEY
+              value: FIXME
+            - name: PROVIDERS__FANARTTVPROVIDER__0__0 # Needed for some reason.
+              value: FIXME
+
+            - name: SPOTIFY_ID
+              value: FIXME
+            - name: SPOTIFY_SECRET
+              value: FIXME
+
+            - name: LASTFM_KEY
+              value: FIXME
+            - name: LASTFM_SECRET
+              value: FIXME
+
+            - name: PROVIDERS__SOLRSEARCHPROVIDER__1__SEARCH_SERVER # What even is this?
+              value: http://search:8983/solr

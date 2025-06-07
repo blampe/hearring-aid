@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (HEAD)
+  labels:
+    io.kompose.service: mq
+  name: mq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mq
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (HEAD)
+      labels:
+        io.kompose.service: mq
+    spec:
+      containers:
+        - image: mq
+          name: mq
+          ports:
+            - containerPort: 5672
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/rabbitmq
+              name: mqdata
+      hostname: mq
+      restartPolicy: Always
+      volumes:
+        - name: mqdata
+          persistentVolumeClaim:
+            claimName: mqdata

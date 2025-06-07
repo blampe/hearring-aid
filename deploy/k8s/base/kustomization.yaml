@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - db-deployment.yaml
+  - db-service.yaml
+  - dbdump-persistentvolumeclaim.yaml
+  - default-postgres-env-configmap.yaml
+  - indexer-cm0-configmap.yaml
+  - indexer-deployment.yaml
+  - mq-deployment.yaml
+  - mq-service.yaml
+  - mqdata-persistentvolumeclaim.yaml
+  - musicbrainz-deployment.yaml
+  - musicbrainz-service.yaml
+  - pgdata-persistentvolumeclaim.yaml
+  - redis-deployment.yaml
+  - redis-service.yaml
+  - search-deployment.yaml
+  - search-service.yaml
+  - solrdata-persistentvolumeclaim.yaml
+  - solrdump-persistentvolumeclaim.yaml
