@@ -12,7 +12,7 @@
     {
       matchDatasources: ["docker"],
       matchPackageNames: ["linuxserver-labs/prarr"],
-      versioning: "regex:^(?<prefix>lidarr-plugins-)(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$.(?<revision>\\d+)",
+      versioning: "regex:^lidarr-plugins-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>.+)$",
       autoApprove: true,
       automerge: true,
     },
