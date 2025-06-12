@@ -8,7 +8,13 @@
       matchDatasources: ['docker'],
       autoApprove: true,
       automerge: true,
-      platformAutomerge: true,
+    },
+    {
+      matchDatasources: ["docker"],
+      matchPackageNames: ["linuxserver-labs/prarr"],
+      versioning: "regex:^(?<prefix>lidarr-plugins-)(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$.(?<revision>\\d+)",
+      autoApprove: true,
+      automerge: true,
     },
   ],
 }
