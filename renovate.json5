@@ -5,12 +5,6 @@
   ],
   packageRules: [
     {
-      matchCategories: [
-        'docker',
-      ],
-      enabled: true,
-    },
-    {
       matchDatasources: [
         'docker',
       ],
