@@ -5,13 +5,7 @@
   ],
   packageRules: [
     {
-      matchDatasources: [
-        'docker',
-      ],
-      matchPackageNames: [
-        'linuxserver/lidarr',
-        'linuxserver-labs/prarr',
-      ],
+      matchDatasources: ['docker'],
       autoApprove: true,
       automerge: true,
       platformAutomerge: true,
