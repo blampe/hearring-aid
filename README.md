@@ -10,8 +10,7 @@ in conjunction with L——'s metadata API.
 > community. The software it's running is not my own and I cannot guarantee its
 > stability. If you'd like to help improve things please reach out!
 
-To use the hosted instance, change your L—— image to
-`blampe/lidarr:2.12.1-develop` or any of the other [available
+To use the hosted instance, change your L—— image to any of the [available
 tags](https://hub.docker.com/repository/docker/blampe/lidarr/tags).
 
 This L—— image is derived from the upstream linuxserver image, with the
