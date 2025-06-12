@@ -11,7 +11,7 @@ in conjunction with L——'s metadata API.
 > stability. If you'd like to help improve things please reach out!
 
 To use the hosted instance, change your L—— image to any of the [available
-tags](https://hub.docker.com/repository/docker/blampe/lidarr/tags).
+tags](https://hub.docker.com/r/blampe/lidarr/tags).
 
 This L—— image is derived from the upstream linuxserver image, with the
 addition of a small nginx proxy responsible for re-directing metadata
