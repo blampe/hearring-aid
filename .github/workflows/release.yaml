@@ -4,6 +4,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  attestations: write
 
 on:
   push:
@@ -16,6 +17,7 @@ on:
     paths:
       - docker/Dockerfile
       - docker/Dockerfile.plugins
+  workflow_dispatch:
 
 jobs:
   build-and-push:
