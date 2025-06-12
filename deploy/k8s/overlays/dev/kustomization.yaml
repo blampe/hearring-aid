@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: hearring-aid
+
+resources:
+  - ../../base
+  # - ../../base/db-deployment.yaml
+  # - ../../base/db-service.yaml
+  # - ../../base/dbdump-persistentvolumeclaim.yaml
+  # - ../../base/default-postgres-env-configmap.yaml
+  # - ../../base/indexer-cm0-configmap.yaml
+  # - ../../base/indexer-deployment.yaml
+  # - ../../base/mq-deployment.yaml
+  # - ../../base/mq-service.yaml
+  # - ../../base/mqdata-persistentvolumeclaim.yaml
+  # - ../../base/musicbrainz-deployment.yaml
+  # - ../../base/musicbrainz-service.yaml
+  # - ../../base/pgdata-persistentvolumeclaim.yaml
+  # - ../../base/redis-deployment.yaml
+  # - ../../base/redis-service.yaml
+  # - ../../base/search-deployment.yaml
+  # - ../../base/search-service.yaml
+  # - ../../base/solrdata-persistentvolumeclaim.yaml
+  # - ../../base/solrdump-persistentvolumeclaim.yaml
+
+  - namespace.yaml
+  - lidarr.metadata-deployment.yaml
+
+patches:
+  - path: patches/db-deployment.yaml
+  - path: patches/dbdump-persistentvolumeclaim.yaml
+  - path: patches/default-postgres-env-configmap.yaml
+  - path: patches/indexer-deployment.yaml
+  - path: patches/mq-deployment.yaml
+  - path: patches/mq-service.yaml
+  - path: patches/mqdata-persistentvolumeclaim.yaml
+  - path: patches/musicbrainz-deployment.yaml
+  - path: patches/pgdata-persistentvolumeclaim.yaml
+  - path: patches/search-deployment.yaml
+  - path: patches/solrdata-persistentvolumeclaim.yaml
+  - path: patches/solrdump-persistentvolumeclaim.yaml

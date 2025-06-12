@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (HEAD)
+  labels:
+    io.kompose.service: musicbrainz
+  name: musicbrainz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: musicbrainz
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (HEAD)
+      labels:
+        io.kompose.service: musicbrainz
+    spec:
+      containers:
+        - env:
+            - name: MUSICBRAINZ_BASE_DOWNLOAD_URL
+              value: https://data.metabrainz.org/pub/musicbrainz
+            - name: MUSICBRAINZ_BASE_FTP_URL
+            - name: MUSICBRAINZ_SERVER_PROCESSES
+              value: "10"
+            - name: MUSICBRAINZ_USE_PROXY
+              value: "1"
+            - name: MUSICBRAINZ_WEB_SERVER_HOST
+              value: localhost
+            - name: MUSICBRAINZ_WEB_SERVER_PORT
+              value: "5000"
+          envFrom:
+            - configMapRef:
+                name: default-postgres-env
+          image: musicbrainz
+          name: musicbrainz
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /media/dbdump
+              name: dbdump
+            - mountPath: /var/cache/musicbrainz/solr-backups
+              name: solrdump
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: dbdump
+          persistentVolumeClaim:
+            claimName: dbdump
+        - name: solrdump
+          persistentVolumeClaim:
+            claimName: solrdump
+            readOnly: true

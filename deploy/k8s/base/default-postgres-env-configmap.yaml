@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  POSTGRES_PASSWORD: musicbrainz
+  POSTGRES_USER: musicbrainz
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: db-default-postgres-env
+  name: default-postgres-env

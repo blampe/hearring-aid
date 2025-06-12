@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mq
+spec:
+  template:
+    spec:
+      containers:
+        - name: mq
+          image: blampe/musicbrainz-rabbitmq:3.6.16-management

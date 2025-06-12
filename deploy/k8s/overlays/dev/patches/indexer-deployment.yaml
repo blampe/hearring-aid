@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: indexer
+spec:
+  template:
+    spec:
+      containers:
+        - name: indexer
+          image: metabrainz/sir:4.0.0-git2consul
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - python -m sir -d amqp_watch
+
+      initContainers:
+        - name: wait-for-postgres
+          image: metabrainz/sir:4.0.0-git2consul
+          command:
+            - psql
+          args:
+            - postgres://abc:abc@db/musicbrainz_db
+            - -c
+            - SELECT 1;
+
+        - name: setup-amqp
+          image: metabrainz/sir:4.0.0-git2consul
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - python -m sir -d amqp_setup
+          envFrom:
+            - configMapRef:
+                name: default-postgres-env
+          volumeMounts:
+            - mountPath: /code/config.ini
+              name: indexer-cm0
+              subPath: config.ini
+
+        # Do this all in one step because the SQL is generated to an ephemeral
+        # file in the container.
+        - name: generate-and-install-amqp-extension
+          image: metabrainz/sir:4.0.0-git2consul
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - |
+              python -m sir -d extension &&
+              python -m sir -d triggers --broker-id=1 &&
+              psql postgres://abc:abc@db/musicbrainz_db -f /code/sql/CreateExtension.sql || true &&
+              psql postgres://abc:abc@db/musicbrainz_db -f /code/sql/CreateFunctions.sql || true &&
+              psql postgres://abc:abc@db/musicbrainz_db -f /code/sql/CreateTriggers.sql || true
+
+          envFrom:
+            - configMapRef:
+                name: default-postgres-env
+          volumeMounts:
+            - mountPath: /code/config.ini
+              name: indexer-cm0
+              subPath: config.ini
+
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["amd64"]
