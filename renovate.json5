@@ -1,18 +1,26 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
   ],
-  "docker": {
-    "enabled": true
-  },
-  "packageRules": [
+  packageRules: [
     {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["linuxserver/lidarr", "linuxserver-labs/prarr"],
-      "autoApprove": true,
-      "automerge": true,
-      "platformAutomerge": true,
-    }
-  ]
+      matchCategories: [
+        'docker',
+      ],
+      enabled: true,
+    },
+    {
+      matchDatasources: [
+        'docker',
+      ],
+      matchPackageNames: [
+        'linuxserver/lidarr',
+        'linuxserver-labs/prarr',
+      ],
+      autoApprove: true,
+      automerge: true,
+      platformAutomerge: true,
+    },
+  ],
 }
