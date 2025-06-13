@@ -1,1 +1,2 @@
 deploy/k8s/overlays/prod
+docker/config/
