@@ -11,6 +11,7 @@ COPY s6-rc.d/user/contents.d/nginx-proxy /etc/s6-overlay/s6-rc.d/user/contents.d
 
 RUN chmod +x /nginx-init && \
     mkdir -p /etc/nginx/ssl && \
+    ln -s /etc/nginx/ssl/lidarr.pem /etc/ssl/certs/lidarr.pem && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
       -keyout /etc/nginx/ssl/lidarr.key \
       -out /etc/nginx/ssl/lidarr.pem \
