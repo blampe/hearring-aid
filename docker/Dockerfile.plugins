@@ -3,13 +3,15 @@ FROM ghcr.io/linuxserver-labs/prarr:lidarr-plugins-2.12.3.4655
 RUN apk update
 RUN apk add --no-cache nginx openssl
 
+COPY nginx-init.sh /nginx-init
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/ssl/private/lidarr.key \
-    -out /etc/ssl/certs/lidarr.pem \
-    -subj "/CN=api.lidarr.audio"
+COPY s6-rc.d/nginx-proxy/ /etc/s6-overlay/s6-rc.d/nginx-proxy/
+COPY s6-rc.d/user/contents.d/nginx-proxy /etc/s6-overlay/s6-rc.d/user/contents.d/
 
-ENTRYPOINT [ "/start.sh" ]
+RUN chmod +x /nginx-init && \
+    mkdir -p /etc/nginx/ssl && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+      -keyout /etc/nginx/ssl/lidarr.key \
+      -out /etc/nginx/ssl/lidarr.pem \
+      -subj "/CN=api.lidarr.audio"
