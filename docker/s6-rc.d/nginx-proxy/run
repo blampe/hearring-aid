@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+exec s6-notifyoncheck -d -n 300 -w 1000 /nginx-init

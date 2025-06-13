@@ -1,0 +1,9 @@
+services:
+  lidarr:
+    build: .
+    volumes:
+      - ./config:/config
+    entrypoint: ["/init"]
+    ports:
+      - 18686:8686
+    restart: unless-stopped
