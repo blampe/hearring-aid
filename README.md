@@ -14,8 +14,9 @@ To use the hosted instance, change your L—— image to any of the [available
 tags](https://hub.docker.com/r/blampe/lidarr/tags).
 
 This L—— image is derived from the upstream linuxserver image, with the
-addition of a small nginx proxy responsible for re-directing metadata
-queries to `api.musicinfo.pro`.
+addition of HAProxy responsible for re-directing metadata
+queries to either `api.musicinfo.pro` or another instance specified by the
+`API_HOST`, `API_PORT` and `API_SECURE` environment variables.
 
 > [!TIP]
 > You might also be interested in

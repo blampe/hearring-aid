@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if [[ $(curl -ksL "https://localhost:${PORT:-443}" | jq -r '.status' 2>/dev/null) = "OK" ]]; then
-  exit 0
-else
-  exit 1
-fi
