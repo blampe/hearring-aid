@@ -12,7 +12,7 @@ spec:
             - /bin/bash
           args:
             - -c
-            - python -m sir -d amqp_watch
+            - python -m sir -d amqp_watch --entity-type artist --entity-type release
 
       initContainers:
         - name: wait-for-postgres
@@ -49,7 +49,7 @@ spec:
             - -c
             - |
               python -m sir -d extension &&
-              python -m sir -d triggers --broker-id=1 &&
+              python -m sir -d triggers --broker-id=1 --entity-type artist --entity-type release &&
               psql postgres://abc:abc@db/musicbrainz_db -f /code/sql/CreateExtension.sql || true &&
               psql postgres://abc:abc@db/musicbrainz_db -f /code/sql/CreateFunctions.sql || true &&
               psql postgres://abc:abc@db/musicbrainz_db -f /code/sql/CreateTriggers.sql || true

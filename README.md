@@ -34,8 +34,13 @@ server, it's just a little tricky to configure.
 
 * Deploy [metabrainz-docker](http://github.com/metabrainz/musicbrainz-docker)
   but use a username/password of abc/abc because the metadata server hard-codes
-  it. This will require ~350GB and a MetaBrainz replication token. This is the
-  hardest part, so make sure you follow the instructions closely.
+  it. Don't use the Solr dumps -- we don't need most of them.
+
+  This is the hardest part, so make sure you follow the instructions closely.
+
+  When interacting with `sir` to generate triggers and reindex data, always use
+  `--entity-type artist --entity-type release` to dramatically reduce storage
+  requirements from ~350GB to ~50GB.
 
 * Deploy L—— metadata using the example in `deploy/compose` as a guide.
 
