@@ -34,6 +34,23 @@ http {
     }
 }
 ```
+if you don't want to use the blampe hosted metadata server you can update the following from the previous nginx.conf excerpt to point to your own self hosted api metadata server (not to be confused with the nginx proxy):
+```
+        location / {
+            proxy_pass https://api.musicinfo.pro/;
+            proxy_set_header Host api.musicinfo.pro;
+        }
+```
+
+ie:
+
+```
+        location / {
+            proxy_pass http://<my-metadata-server>/;
+            proxy_set_header Host api.musicinfo.pro;
+        }
+```
+see the lidarr metadata api repo to set that up https://github.com/Lidarr/LidarrAPI.Metadata
 
 create a docker-compose.yaml with the following config:
 
@@ -56,6 +73,8 @@ services:
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
+    depends_on:
+      - lidarr-api-proxy
     environment:
       - PUID=1000
       - PGID=1000
@@ -72,3 +91,16 @@ services:
     restart: unless-stopped
 
 ```
+
+instead of using docker networks with a dns alias like above you could instead do the following:
+```
+services:
+  lidarr-api-proxy:
+  ports:
+    - 443:443
+
+    lidarr:
+      extra_hosts:
+        - api.lidarr.audio:192.168.1.10
+```
+where 192.168.1.10 is the ip of your docker host.
