@@ -10,12 +10,36 @@ in conjunction with L——'s metadata API.
 > community. The software it's running is not my own and I cannot guarantee its
 > stability. If you'd like to help improve things please reach out!
 
-To use the hosted instance, change your L—— image to any of the [available
-tags](https://hub.docker.com/r/blampe/lidarr/tags).
+There are two ways to use the hosted image: via a custom Docker image or via
+some manual SQL.
+
+### Docker Images
+The simplest way to use the hosted instance in by changing your L—— image to any 
+of the [available tags](https://hub.docker.com/r/blampe/lidarr/tags).
 
 This L—— image is derived from the upstream linuxserver image, with the
 addition of a small nginx proxy responsible for re-directing metadata
 queries to `api.musicinfo.pro`.
+
+### Manual SQL
+
+If you're not using Docker, or if you don't want to use a forked image, you can
+insert a row into your database to override the default metadata server.
+
+```
+sqlite> INSERT INTO Config (Key, Value) VALUES ('metadatasource', 'https://api.musicinfo.pro/api/v0.4/');
+```
+
+Note that in order to revert back to official metadata you'll need to remove
+that row:
+
+```
+sqlite> DELETE FROM Config WHERE Key = 'metadatasource';
+```
+
+
+
+
 
 > [!TIP]
 > You might also be interested in
