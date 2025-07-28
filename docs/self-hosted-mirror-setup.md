@@ -38,7 +38,7 @@ apt-get upgrade -y && apt-get dist-upgrade -y
 
 ## 2. Generate MusicBrainz Replication Token
 
-1. Visit https://metabrainz.org/supporters/account-type and select your account type (usually "individual").
+1. Visit https://metabrainz.org/supporters/account-type and select your account type (usually "Non-commercial").
 2. Go to https://metabrainz.org/profile and create an access token.
 3. Save the 40-character alphanumeric token for later.
 
