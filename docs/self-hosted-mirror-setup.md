@@ -310,41 +310,74 @@ Follow these steps to test the setup and resolve common issues.
 
 - Open Lidarr and search for a new artist.  
   - If metadata loads correctly, your setup is working.
-- Give Lidarr a restart to rule out any issues there.
+  - If you receive an error in Lidarr, proceed below.
 
-### 🔁 Restart the Stack (Clean Restart)
+### 🌐 Test Metadata Server (`lmd`) in Browser
 
-If things aren't working as expected, try restarting the MusicBrainz stack:
+To confirm that `lmd` is serving metadata properly, visit this URL in your browser (replace `host_ip` with your Docker host’s IP):
 
-```bash
-cd /opt/docker/musicbrainz-docker
-docker compose down && sleep 30 && docker compose up -d
+```
+http://host_ip:5001/artist/1921c28c-ec61-4725-8e35-38dd656f7923
 ```
 
-> Give it a minute or two after restarting for services to fully initialize.
+You should see a JSON response with artist details for **I Prevail**. If not:
 
-### 🌐 Test Metadata Server (lmd) in Browser
+- Validate that MusicBrainz is running:
 
-To confirm `lmd` is serving metadata properly, visit this URL in your browser (replace `host_ip` with your Docker host’s IP):
+  ```bash
+  docker ps --filter "name=musicbrainz-docker-lmd-1"
+  ```
+
+  - If not running, perform a **clean restart** of the stack.
+
+- If the container is running, check the logs for errors:
+
+  ```bash
+  docker logs -f musicbrainz-docker-lmd-1
+  ```
+
+  - Look for any errors or failed service messages that might indicate why data isn't being returned. A clean restart will likely resolve errors in the `lmd` container such as:
+
+  ```text
+  asyncpg.exceptions.UndefinedTableError: relation "wikipedia" does not exist
+  ```
+  > (`wikipedia`, `fanart`, `tadb`, or other missing tables)
+
+### 🌐 Test MusicBrainz instance (`musicbrainz`)
+
+To confirm your MusicBrainz mirror is functioning, visit this URL in your browser (replace `host_ip` with your Docker host’s IP):
 
 ```
 http://host_ip:5000/artist/1921c28c-ec61-4725-8e35-38dd656f7923
 ```
 
-You should see a JSON response with artist details. If not:
+You should see the artist page for **I Prevail**. If not:
 
-- The `lmd` container may not be running correctly.
-- The metadata may not be indexed yet.
+- Validate that MusicBrainz is running:
 
-### 📋 Check Logs for Errors
+  ```bash
+  docker ps --filter "name=musicbrainz-docker-musicbrainz-1"
+  ```
 
-To troubleshoot further, view the `lmd` container logs:
+  - If not running, perform a **clean restart** of the stack.
+
+- If the container is running, check the logs for errors:
+
+  ```bash
+  docker logs -f musicbrainz-docker-musicbrainz-1
+  ```
+
+### 🔁 Clean Restart of the Stack
+
+It's super quick and easy to perform a clean restart, so please try this before asking for support or opening an issue:
 
 ```bash
-docker logs -f musicbrainz-docker-lmd-1
+cd /opt/docker/musicbrainz-docker
+docker compose down -v && sleep 60 && docker compose up -d
 ```
 
-Look for any errors or failed service messages that might indicate why the data isn't being returned.
+> Wait a minute or two after restarting to allow all services to fully initialize.
+
 
 ---
 
