@@ -27,10 +27,19 @@ spec:
               value: "true"
             - name: USE_CACHE
               value: "true"
+            - name: IMAGE_CACHE_HOST
+              value: "theaudiodb.com" # This causes images to be hotlinked. The image proxy is private. It wouldn't be too hard to write our own.
             - name: ENABLE_STATS
               value: "false"
+            - name: EXTERNAL_TIMEOUT
+              value: "5000"
             - name: ROOT_PATH
               value: /api/v0.4/
+
+            - name: TADB_KEY
+              value: "2"
+            - name: PROVIDERS__THEAUDIODBPROVIDER__0__0
+              value: "2"
 
             - name: CLOUDFLARE_AUTH_EMAIL
               value: FIXME

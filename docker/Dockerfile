@@ -1,4 +1,4 @@
-FROM linuxserver/lidarr:2.13.1-develop
+FROM linuxserver/lidarr:nightly-version-2.13.2.4685
 
 RUN apk update
 RUN apk add --no-cache nginx openssl
@@ -13,7 +13,7 @@ RUN chmod +x /nginx-init && \
     mkdir -p /etc/nginx/ssl && \
     ln -s /etc/nginx/ssl/lidarr.pem /etc/ssl/certs/lidarr.pem && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-      -keyout /etc/nginx/ssl/lidarr.key \
-      -out /etc/nginx/ssl/lidarr.pem \
-      -subj "/CN=api.lidarr.audio"
+    -keyout /etc/nginx/ssl/lidarr.key \
+    -out /etc/nginx/ssl/lidarr.pem \
+    -subj "/CN=api.lidarr.audio"
 
