@@ -1,4 +1,4 @@
-FROM linuxserver/lidarr:version-2.12.4.4658
+FROM linuxserver/lidarr:nightly-version-2.13.2.4685
 
 RUN apk update
 RUN apk add --no-cache nginx openssl
