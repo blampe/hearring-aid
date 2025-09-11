@@ -55,23 +55,26 @@ mkdir -p local/compose
 
 ### 3.1 Override Postgres User and Password
 
+> [!WARNING]  
+> Do NOT change the Postgres user & password!
+
 Create `local/compose/postgres-settings.yml`:
 
 ```yaml
 services:
   musicbrainz:
     environment:
-      POSTGRES_USER: "abc"
-      POSTGRES_PASSWORD: "abc"
+      POSTGRES_USER: "abc"                    # do not change
+      POSTGRES_PASSWORD: "abc"                # do not change
       MUSICBRAINZ_WEB_SERVER_HOST: "HOST_IP"  # Replace with your host IP
   db:
     environment:
-      POSTGRES_USER: "abc"
-      POSTGRES_PASSWORD: "abc"
+      POSTGRES_USER: "abc"                    # do not change
+      POSTGRES_PASSWORD: "abc"                # do not change
   indexer:
     environment:
-      POSTGRES_USER: "abc"
-      POSTGRES_PASSWORD: "abc"
+      POSTGRES_USER: "abc"                    # do not change
+      POSTGRES_PASSWORD: "abc"                # do not change
 ```
 
 ### 3.2 Customize Memory Settings
@@ -212,7 +215,7 @@ Edit `/etc/crontab` and add:
 
 ```bash
 docker compose down
-admin/set-replication-token   # Enter your replication token when prompted
+admin/set-replication-token   # Enter your MusicBrainz replication token when prompted (from step 2)
 admin/configure add replication-token
 docker compose up -d
 docker compose exec musicbrainz replication.sh   # Run initial replication; use screen to keep it running
