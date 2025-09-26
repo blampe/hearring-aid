@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver-labs/prarr:lidarr-plugins-2.14.3.4793
+FROM ghcr.io/linuxserver-labs/prarr:lidarr-plugins-2.14.4.4810
 
 RUN apk update
 RUN apk add --no-cache nginx openssl
