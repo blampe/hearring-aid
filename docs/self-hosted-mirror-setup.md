@@ -227,7 +227,7 @@ docker compose up -d
 ## 8. Initialize Lidarr Metadata Server Database
 
 ```bash
-docker exec -it musicbrainz-docker-musicbrainz-1 /bin/bash
+docker compose exec -it musicbrainz /bin/bash
 cd /tmp
 git clone https://github.com/Lidarr/LidarrAPI.Metadata.git
 psql postgres://abc:abc@db/musicbrainz_db -c 'CREATE DATABASE lm_cache_db;'
