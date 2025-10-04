@@ -193,6 +193,16 @@ admin/configure add local/compose/postgres-settings.yml local/compose/memory-set
 docker compose build
 docker compose run --rm musicbrainz createdb.sh -fetch   # This may take an hour or more
 docker compose up -d
+```
+
+If you have a fast internet connection and don't mind downloading ~60 GB of data, you can download pre-built search indexes:
+```
+docker compose exec search fetch-backup-archives
+docker compose exec search load-backup-archives
+```
+
+Otherwise, rebuild the search index (which will take a few hours):
+```
 docker compose exec indexer python -m sir reindex --entity-type artist --entity-type release  # Indexing may take a couple hours
 ```
 
