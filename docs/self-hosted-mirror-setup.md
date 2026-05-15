@@ -11,7 +11,7 @@ This guide will help you deploy a local MusicBrainz mirror, [blampe's Lidarr Met
 
 ## Prerequisites
 
-- Debian 12.11 server (root access)
+- Debian 13 server (root access)
 - At least 8GB RAM, a moderately capable CPU, and 100GB of free disk space
 - Basic familiarity with Docker and command line
 - Internet connection
