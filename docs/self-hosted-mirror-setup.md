@@ -51,6 +51,7 @@ apt-get upgrade -y && apt-get dist-upgrade -y
 ```bash
 mkdir -p /opt/docker && cd /opt/docker
 git clone https://github.com/metabrainz/musicbrainz-docker.git
+cd /opt/docker/musicbrainz-docker
 git fetch --tags origin
 git checkout v-2026-05-13.0-mbdb31-pg18
 cd musicbrainz-docker
@@ -288,7 +289,7 @@ docker compose up -d
 ## 9. Initialize Lidarr Metadata Server Database
 
 ```bash
-docker exec -it musicbrainz-docker-musicbrainz-1 /bin/bash
+docker compose exec -it musicbrainz /bin/bash
 cd /tmp
 git clone https://github.com/Lidarr/LidarrAPI.Metadata.git
 psql postgres://abc:abc@db/musicbrainz_db -c 'CREATE DATABASE lm_cache_db;'
