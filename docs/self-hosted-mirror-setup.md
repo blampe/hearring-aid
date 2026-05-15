@@ -51,10 +51,9 @@ apt-get upgrade -y && apt-get dist-upgrade -y
 ```bash
 mkdir -p /opt/docker && cd /opt/docker
 git clone https://github.com/metabrainz/musicbrainz-docker.git
-cd /opt/docker/musicbrainz-docker
+cd musicbrainz-docker
 git fetch --tags origin
 git checkout v-2026-05-13.0-mbdb31-pg18
-cd musicbrainz-docker
 mkdir -p local/compose
 ```
 
