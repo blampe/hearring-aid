@@ -99,11 +99,6 @@ Create `local/compose/volume-settings.yml`:
 
 ```yaml
 volumes:
-  mqdata:
-    driver_opts:
-      type: none
-      device: /opt/docker/musicbrainz-docker/volumes/mqdata
-      o: bind
   pgdata:
     driver_opts:
       type: none
@@ -228,7 +223,7 @@ services:
 ## 4. Create Volume Directories and Add Compose Overrides
 
 ```bash
-mkdir -p volumes/{mqdata,pgdata,solrdata,dbdump,solrdump,lmdconfig}
+mkdir -p volumes/{pgdata,solrdata,dbdump,solrdump,lmdconfig}
 admin/configure add local/compose/postgres-settings.yml local/compose/memory-settings.yml local/compose/volume-settings.yml local/compose/lmd-settings.yml local/compose/resource-limits.yml
 ```
 
