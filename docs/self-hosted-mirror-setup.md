@@ -247,25 +247,19 @@ docker compose exec search load-backup-archives
 docker compose exec search remove-backup-archives
 ```
 
-The below will validate and build missing indices. If you ran the above to download/import, this task should be relatively qiuck; otherwise it can take an hour or more.
-
+The below will validate and build missing indices. If you ran the above to download/import, this task should be relatively quick; otherwise it can take an hour or more.
 ```bash
 docker compose exec indexer python -m sir reindex --entity-type artist --entity-type release
 ```
 
----
-
-## 7. Schedule Weekly Index Updates
-
 Edit `/etc/crontab` and add:
-
 ```
 0 1 * * 7 root cd /opt/docker/musicbrainz-docker && /usr/bin/docker compose exec -T indexer python -m sir reindex --entity-type artist --entity-type release
 ```
 
 ---
 
-## 8. Configure Replication Token and Start Replication
+## 7. Configure Replication Token and Start Replication
 
 ```bash
 docker compose down
@@ -281,7 +275,7 @@ docker compose up -d
 
 ---
 
-## 9. Initialize Lidarr Metadata Server Database
+## 8. Initialize Lidarr Metadata Server Database
 
 ```bash
 docker compose exec -it musicbrainz /bin/bash
@@ -295,13 +289,13 @@ docker compose restart
 
 ---
 
-## 10. Using the Lidarr Metadata Server
+## 9. Using the Lidarr Metadata Server
 
 - Your Lidarr metadata server is available at: `http://host-ip:5001`
 
 ---
 
-## 11. (IF NEEDED) Stand Up Lidarr-plugin container
+## 10. (IF NEEDED) Stand Up Lidarr-plugin container
 
 ```bash
 cd /opt/docker && mkdir -p lidarr/volumes/lidarrconfig && cd lidarr
@@ -338,7 +332,7 @@ docker compose up -d
 
 ---
 
-### 11.1 Configure Tubifarry Plugin in Lidarr
+### 10.1 Configure Tubifarry Plugin in Lidarr
 
 1. Open your browser to `http://host_ip:8686` and complete initial setup.
 2. Navigate to **System > Plugins**.
@@ -359,7 +353,7 @@ docker compose up -d
 
 ---
 
-## 12. Verify and Troubleshoot
+## 11. Verify and Troubleshoot
 
 Follow these steps to test the setup and resolve common issues.
 
