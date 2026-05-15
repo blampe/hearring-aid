@@ -244,6 +244,7 @@ docker compose up -d
 ```bash
 docker compose exec search fetch-backup-archives
 docker compose exec search load-backup-archives
+docker compose exec search remove-backup-archives
 ```
 
 The below will validate and build missing indices. If you ran the above to download/import, this task should be relatively qiuck; otherwise it can take an hour or more.
