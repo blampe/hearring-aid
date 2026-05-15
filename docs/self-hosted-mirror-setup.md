@@ -234,18 +234,32 @@ admin/configure add local/compose/postgres-settings.yml local/compose/memory-set
 
 ---
 
-## 5. Build and Initialize MusicBrainz Database
+## 5 Build and Initialize MusicBrainz Database
 
 ```bash
 docker compose build
 docker compose run --rm musicbrainz createdb.sh -fetch   # This may take an hour or more
 docker compose up -d
-docker compose exec indexer python -m sir reindex --entity-type artist --entity-type release  # Indexing may take a couple hours
+```
+---
+
+## 6 Build Search Indices
+
+(OPTIONAL) If you have a fast internet connection, you can download ~60GB and import pre-built search indices from Musicbrainz by doing the following:
+```bash
+docker compose exec search fetch-backup-archives
+docker compose exec search load-backup-archives
+```
+
+The below will validate and build missing indices. If you ran the above to download/import, this task should be relatively qiuck; otherwise it can take an hour or more.
+
+```bash
+docker compose exec indexer python -m sir reindex --entity-type artist --entity-type release
 ```
 
 ---
 
-## 6. Schedule Weekly Index Updates
+## 7. Schedule Weekly Index Updates
 
 Edit `/etc/crontab` and add:
 
@@ -255,7 +269,7 @@ Edit `/etc/crontab` and add:
 
 ---
 
-## 7. Configure Replication Token and Start Replication
+## 8. Configure Replication Token and Start Replication
 
 ```bash
 docker compose down
@@ -271,7 +285,7 @@ docker compose up -d
 
 ---
 
-## 8. Initialize Lidarr Metadata Server Database
+## 9. Initialize Lidarr Metadata Server Database
 
 ```bash
 docker exec -it musicbrainz-docker-musicbrainz-1 /bin/bash
@@ -285,13 +299,13 @@ docker compose restart
 
 ---
 
-## 9. Using the Lidarr Metadata Server
+## 10. Using the Lidarr Metadata Server
 
 - Your Lidarr metadata server is available at: `http://host-ip:5001`
 
 ---
 
-## 10. (IF NEEDED) Stand Up Lidarr-plugin container
+## 11. (IF NEEDED) Stand Up Lidarr-plugin container
 
 ```bash
 cd /opt/docker && mkdir -p lidarr/volumes/lidarrconfig && cd lidarr
@@ -328,7 +342,7 @@ docker compose up -d
 
 ---
 
-### 10.1 Configure Tubifarry Plugin in Lidarr
+### 11.1 Configure Tubifarry Plugin in Lidarr
 
 1. Open your browser to `http://host_ip:8686` and complete initial setup.
 2. Navigate to **System > Plugins**.
@@ -349,7 +363,7 @@ docker compose up -d
 
 ---
 
-## 11. Verify and Troubleshoot
+## 12. Verify and Troubleshoot
 
 Follow these steps to test the setup and resolve common issues.
 
