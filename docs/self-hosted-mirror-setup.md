@@ -1,9 +1,11 @@
 # MusicBrainz Mirror with Lidarr Metadata Server Setup Guide
 
-This guide will help you deploy a local MusicBrainz mirror, [blampe's Lidarr Metadata Server](https://hub.docker.com/r/blampe/lidarr.metadata), and integrate it with Lidarr using the Tubifarry plugin, providing a working setup despite current Lidarr metadata issues. It walks through host and container setup, basic configuration, and validation steps to ensure the system is working properly.  If you already have a Lidarr instance but are not using lidarr-plugins, you will need to migrate to either ls.io or hot.io plugin branch (step 10 below walks through setting up a new lidarr container using ls.io)
+This guide will help you deploy a local MusicBrainz mirror, [blampe's Lidarr Metadata Server](https://hub.docker.com/r/blampe/lidarr.metadata), and integrate it with Lidarr using the Tubifarry plugin, providing a working setup despite current Lidarr metadata issues. It walks through host and container setup, basic configuration, and validation steps to ensure the system is working properly.  If you already have a Lidarr instance but are not using lidarr-plugins, you will need to migrate to either ls.io or hot.io plugin branch (step 10 below walks through setting up a new lidarr container using ls.io).
 
 > **Note:**  
-> This guide is based on Debian 12 and Docker. It is provided as-is and without warranty, and your feedback and testing results are appreciated!
+> This guide is based on Debian 13 and Docker CE. It is provided as-is and without warranty, and your feedback and testing results are appreciated!
+>
+> This guide is pinned to Musicbrainz-docker release [v-2026-05-13.0-mbdb31-pg18](https://github.com/metabrainz/musicbrainz-docker/releases/tag/v-2026-05-13.0-mbdb31-pg18) (Released May-13, 2026). If you have used a previous version of this guide, you will need to start fresh for this version to work!
 
 ---
 
@@ -49,6 +51,8 @@ apt-get upgrade -y && apt-get dist-upgrade -y
 ```bash
 mkdir -p /opt/docker && cd /opt/docker
 git clone https://github.com/metabrainz/musicbrainz-docker.git
+git fetch --tags origin
+git checkout v-2026-05-13.0-mbdb31-pg18
 cd musicbrainz-docker
 mkdir -p local/compose
 ```
@@ -81,7 +85,7 @@ Create `local/compose/memory-settings.yml`:
 ```yaml
 services:
   db:
-    command: postgres -c "shared_buffers=2GB" -c "shared_preload_libraries=pg_amqp.so"
+    command: postgres -c "shared_buffers=2GB"
   search:
     environment:
       - SOLR_HEAP=2g
@@ -171,9 +175,52 @@ services:
       - lmdconfig:/config
     depends_on:
       - db
-      - mq
       - search
-      - redis
+```
+
+### 3.5 Configure Lidarr Metadata Server
+
+Create `local/compose/resource-limits.yml`:
+
+```yaml
+# Description: Sets RAM limits on each service -- adjust as you see fit, but these are the values that work well for me
+
+services:
+  musicbrainz:
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  db:
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+
+  indexer:
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  search:
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+
+  valkey:
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  lmd:
+    deploy:
+      resources:
+        limits:
+          memory: 2g
 ```
 
 ---
@@ -182,7 +229,7 @@ services:
 
 ```bash
 mkdir -p volumes/{mqdata,pgdata,solrdata,dbdump,solrdump,lmdconfig}
-admin/configure add local/compose/postgres-settings.yml local/compose/memory-settings.yml local/compose/volume-settings.yml local/compose/lmd-settings.yml
+admin/configure add local/compose/postgres-settings.yml local/compose/memory-settings.yml local/compose/volume-settings.yml local/compose/lmd-settings.yml local/compose/resource-limits.yml
 ```
 
 ---
